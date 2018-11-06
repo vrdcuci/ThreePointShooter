@@ -17,8 +17,9 @@ public class VRRaycaster : MonoBehaviour
     public LayerMask excludeLayers;
     public VRRaycaster.Callback raycastHitCallback;
     public GameObject player;
-    public GameObject score;
-    public bool inPlayZone = false;
+    public GameObject thingHit;
+
+
 
     void Awake()
     {
@@ -116,25 +117,15 @@ public class VRRaycaster : MonoBehaviour
                     Vector3 newPosition = new Vector3(hit.transform.position.x, 1.65f, hit.transform.position.z);
 
                     player.transform.position = newPosition;
-
-                    inPlayZone = true;
-
                 }
-                //score.GetComponent<ScoreKeeper>().updateScore();
-
             }
-
-            if (inPlayZone)
+            else if (hit.transform.gameObject.CompareTag("Respawn"))
             {
-                if (hit.transform.gameObject.name == "gun")
-                {
-                    if (OVRInput.GetUp(OVRInput.Button.PrimaryIndexTrigger))
-                    {
-                        GameObject.Find("gun").SetActive(false);
-                        GameObject.Find("OculusGoControllerModel").GetComponent<MeshRenderer>().enabled = false;
-                        GameObject.Find("SciFiGun_Specular").transform.GetChild(0).gameObject.SetActive(true);
-                    }
-                }
+                thingHit = hit.transform.gameObject;
+            }
+            else
+            {
+                thingHit = null;
             }
         }
     }
